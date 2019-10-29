@@ -15,15 +15,18 @@ for i in range(len(data)):
 
 for user in users.keys():
     subgroup = {}
-    timestamp = ""
+    timestamp = "000"
 
     ## print(bool(subgroup)) - checking if dict is empty
     for field in users[user]:
         if subgroup: ## checking if dict is empty
             timestamp = field['ts']
             subgroup[timestamp] = [field]
-        elif (float(field['ts']) - float(timestamp)) < 120:  ## comparing current timestamp with last one
+        elif float(field['ts']) - float(timestamp) < 120:  ## comparing current timestamp with last one
             subgroup[timestamp].append(field)               ## adding to the subgroup of the last timestamp
         else:                                               ## creating new subgroup for current timestamp
             timestamp = field['ts']
             subgroup[timestamp] = [field]
+
+    json_file = open("%s.json" % user, 'w')
+    json.dump(subgroup, json_file)
